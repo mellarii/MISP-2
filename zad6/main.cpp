@@ -1,4 +1,9 @@
-#include <bits/stdc++.h>
+#include <iostream>    
+#include <fstream>    
+#include <vector>      
+#include <algorithm>   
+#include <iterator> 
+
 using namespace std;
 
 int main(int argc, char* argv[]) {
@@ -41,14 +46,22 @@ int main(int argc, char* argv[]) {
     // 2) Massiv v diapazone [a, b] (udalyaem chisla, ne lezhashchie v [a,b])
     vector<long long> in_range = orig;
     auto out_of_range_pred = [&](long long x) {
-        return (x < a) || (x > b);
+        return (x < a) or (x > b);
     };
+
+    /*
+    bool out_of_range_pred(long long x) {
+        return (x < a) or (x > b);
+    }
+    */
     // remove_if + erase
     auto new_end = remove_if(in_range.begin(), in_range.end(), out_of_range_pred);
     in_range.erase(new_end, in_range.end());
 
     cout << "Massiv v diapazone [" << a << ", " << b << "]:\n";
-    copy(in_range.begin(), in_range.end(), ostream_iterator<long long>(cout, " "));
+    for (size_t i = 0; i < in_range.size(); i++) {
+        cout << in_range[i] << " ";
+    }
     cout << "\n\n";
 
     // 3) Nayti maksimum (pervoe vkhozhdenie), zatem nayti pervyy chetnyy element, sleduyushchiy za maksimumom,
@@ -68,8 +81,7 @@ int main(int argc, char* argv[]) {
             excluded = true;
             excluded_value = *it_search;
             excluded_pos1based = distance(in_range.begin(), it_search) + 1; // 1-based
-            // udaliaem element
-            in_range.erase(it_search);
+            in_range.erase(it_search); // udaliaem element
         }
     }
 
