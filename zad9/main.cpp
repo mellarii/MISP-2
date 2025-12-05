@@ -11,13 +11,13 @@ using QuadraticResult = std::variant<std::monostate, double, std::pair<double,do
 // vozvraschaet std::variant: monostate (net realnykh korney),
 // double (odin koren), ili pair<double,double> (dva kornya)
 QuadraticResult solveQuadratic(double a, double b, double c) {
-    const double eps = 1e-12; // malenkaya pogreshnost' dlya sravneniy s nul'em
+    const double eps = 1e-12; // malenkaya pogreshnost dlya sravneniy s nulem
     if (std::abs(a) < eps) { // esli a ~= 0 -> lineynoe uravnenie
         if (std::abs(b) < eps) return std::monostate{}; // b ~= 0 -> net resheniy ili beskonechno mnog; my vozvraschaem monostate
         return -c / b; // odin koren dlya lineynogo uravneniya
     }
     double D = b*b - 4*a*c; // diskriminant
-    if (D < -eps) return std::monostate{}; // otricatel'nyy -> net realnykh korney
+    if (D < -eps) return std::monostate{}; // otricatelnyy -> net realnykh korney
     if (std::abs(D) <= eps) return -b / (2*a); // odin dvoynoy koren
     double s = std::sqrt(D); // kvadratnyy koren diskriminanta
     return std::make_pair((-b + s) / (2*a), (-b - s) / (2*a)); // dva kornya
@@ -25,12 +25,12 @@ QuadraticResult solveQuadratic(double a, double b, double c) {
 
 // RootVisitor: posetitelskaya struktura dlya vyvoda rezultata
 struct RootVisitor {
-    void operator()(std::monostate) const { std::cout << "Net deystvitelnykh korney"; } // net real'nykh korney
+    void operator()(std::monostate) const { std::cout << "Net deystvitelnykh korney"; } // net realnykh korney
     void operator()(double r) const { std::cout << "Odin koren: x = " << r << '\n'; } // odin koren
     void operator()(const std::pair<double,double>& p) const { std::cout << "Dva kornya: x1 = " << p.first << ", x2 = " << p.second << '\n'; } // dva kornya
 };
 
-// parseArgs: proveryaet argv[i] i summyruet tol'ko polnost'yu chislovye stroki
+// parseArgs: proveryaet argv[i] i summyruet tolko polnostyu chislovye stroki
 // vozvraschaet optional<double>: esli net chisel -> nullopt
 std::optional<double> parseArgs(int argc, char* argv[]) {
     std::optional<double> sum; // pustoy optional - esli ne naydeno chisel
@@ -47,7 +47,7 @@ std::optional<double> parseArgs(int argc, char* argv[]) {
     return sum; // nullopt esli ne bylo chisel
 }
 
-// prostoy main, pokazivayet rabotu Task1 i Task2
+// main dlya Task1 i Task2
 int main(int argc, char* argv[]) {
     // Testy dlya Task1 (kvadratnye uravneniya)
     struct T{double a,b,c; const char* d;};
@@ -59,16 +59,16 @@ int main(int argc, char* argv[]) {
         {0,2,-4,"2x - 4 = 0"}
     };
 
-    std::cout << "--- Task1: kvadratnye uravneniya ---"; // zagolovok dlya pervoy chasti
+    std::cout << "Task1: kvadratnye uravneniya: "; // zagolovok dlya pervoy chasti
     for (auto const& t : tests) {
         std::cout << "Uravnenie: " << t.d << '\n'; // vyvod opredeleniya uravneniya
         std::visit(RootVisitor{}, solveQuadratic(t.a,t.b,t.c)); // vizit rezultata i vyvod
     }
 
     // Task2: parse args
-    std::cout << "--- Task2: parsig argumentov ---"; // zagolovok dlya vtoroy chasti
+    std::cout << "Task2: parsig argumentov: "; // zagolovok dlya vtoroy chasti
     if (auto s = parseArgs(argc, argv)) std::cout << "Summa chislovykh argumentov: " << *s << '\n';
     else std::cout << "Chislovye argumenty ne naideny"; // esli net chisel v argv
 
-    return 0; // vyhod iz programma
+    return 0;
 }
